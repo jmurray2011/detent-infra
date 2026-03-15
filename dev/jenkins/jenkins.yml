@@ -1,0 +1,14 @@
+jenkins:
+  systemMessage: "Detent local dev environment"
+  numExecutors: 4
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "admin"
+  authorizationStrategy: unsecured
+
+unclassified:
+  location:
+    url: "http://localhost:8080/"
