@@ -4,7 +4,7 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=dynamodb,sns,sqs,s3,ssm,sts
+      - SERVICES=dynamodb,sns,sqs,s3,ssm,sts,lambda,iam
       - DEBUG=0
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
