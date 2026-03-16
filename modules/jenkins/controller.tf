@@ -63,6 +63,14 @@ resource "aws_ecs_task_definition" "controller" {
       },
     ]
 
+    healthCheck = {
+      command     = ["CMD-SHELL", "curl -sf http://localhost:8080/login || exit 1"]
+      interval    = 30
+      timeout     = 10
+      retries     = 3
+      startPeriod = 120
+    }
+
     logConfiguration = {
       logDriver = "awslogs"
       options = {
