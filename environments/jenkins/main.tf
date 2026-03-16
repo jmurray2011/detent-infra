@@ -17,7 +17,8 @@ module "jenkins" {
   agent_image            = var.agent_image
   domain_name            = var.domain_name
   jenkins_admin_password_secret_arn = var.jenkins_admin_password_secret_arn
-  automation_role_arn    = var.automation_role_arn
+  automation_role_arn        = var.automation_role_arn
+  detent_pipelines_repo_url = var.detent_pipelines_repo_url
 }
 
 # --- Outputs ---

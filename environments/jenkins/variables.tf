@@ -43,3 +43,8 @@ variable "automation_role_arn" {
   type        = string
   default     = ""
 }
+
+variable "detent_pipelines_repo_url" {
+  description = "Git URL for the detent-pipelines repo (seed job source)."
+  type        = string
+}

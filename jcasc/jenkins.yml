@@ -34,7 +34,7 @@ jenkins:
         templates:
           - label: "detent-agent"
             templateName: "detent-agent"
-            taskDefinitionOverride: "${AGENT_TASK_DEFINITION_ARN}"
+            image: "${AGENT_IMAGE}"
             launchType: "FARGATE"
             networkMode: "awsvpc"
             subnets: "${AGENT_SUBNET_IDS}"
@@ -61,24 +61,19 @@ unclassified:
 
 jobs:
   - script: |
-      folder('lambda-deploy') {
-        description('Lambda deployment automation')
-      }
-      freeStyleJob('lambda-deploy/launcher') {
-        description('Placeholder — configure pipeline from SCM after initial setup')
-      }
-      freeStyleJob('lambda-deploy/watcher') {
-        description('Placeholder — configure pipeline from SCM after initial setup')
-      }
-      folder('config-sync') {
-        description('Config synchronization automation')
-      }
-      freeStyleJob('config-sync/launcher') {
-        description('Placeholder — configure pipeline from SCM after initial setup')
-      }
-      freeStyleJob('config-sync/watcher') {
-        description('Placeholder — configure pipeline from SCM after initial setup')
-      }
-      freeStyleJob('manual-intervention') {
-        description('Cancel, retry, or force-advance a stuck operation')
+      pipelineJob('seed') {
+        description('Reads pipeline manifests and creates all jobs. Run after fresh deploy or when pipelines change.')
+        definition {
+          cpsScm {
+            scm {
+              git {
+                remote {
+                  url('${DETENT_PIPELINES_REPO_URL}')
+                }
+                branches('*/master')
+              }
+            }
+            scriptPath('Jenkinsfile.seed')
+          }
+        }
       }

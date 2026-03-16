@@ -92,17 +92,15 @@ resource "aws_iam_role_policy" "controller_task" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "ECSAgentManagement"
+        Sid    = "ECSClusterScoped"
         Effect = "Allow"
         Action = [
           "ecs:RunTask",
           "ecs:StopTask",
           "ecs:DescribeTasks",
           "ecs:ListTasks",
-          "ecs:RegisterTaskDefinition",
-          "ecs:DeregisterTaskDefinition",
           "ecs:DescribeContainerInstances",
-          "ecs:DescribeTaskDefinition",
+          "ecs:TagResource",
         ]
         Resource = "*"
         Condition = {
@@ -110,6 +108,16 @@ resource "aws_iam_role_policy" "controller_task" {
             "ecs:cluster" = aws_ecs_cluster.detent.arn
           }
         }
+      },
+      {
+        Sid    = "ECSGlobal"
+        Effect = "Allow"
+        Action = [
+          "ecs:DescribeTaskDefinition",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DeregisterTaskDefinition",
+        ]
+        Resource = "*"
       },
       {
         Sid    = "PassAgentRoles"
