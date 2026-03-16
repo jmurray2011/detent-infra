@@ -33,10 +33,9 @@ variable "agent_image" {
   type        = string
 }
 
-variable "jenkins_admin_password" {
-  description = "Jenkins admin password."
+variable "jenkins_admin_password_secret_arn" {
+  description = "Secrets Manager ARN for the Jenkins admin password."
   type        = string
-  sensitive   = true
 }
 
 variable "automation_role_arn" {

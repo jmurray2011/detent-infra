@@ -53,6 +53,21 @@ resource "aws_iam_role_policy_attachment" "controller_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_iam_role_policy" "controller_execution_secrets" {
+  name = "secrets-access"
+  role = aws_iam_role.controller_execution.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Sid      = "ReadJenkinsSecrets"
+      Effect   = "Allow"
+      Action   = ["secretsmanager:GetSecretValue"]
+      Resource = [var.jenkins_admin_password_secret_arn]
+    }]
+  })
+}
+
 # --- Controller task role (ECS plugin needs to launch agents) ---
 
 resource "aws_iam_role" "controller_task" {

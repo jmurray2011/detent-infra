@@ -48,13 +48,19 @@ resource "aws_ecs_task_definition" "controller" {
     environment = [
       { name = "CASC_JENKINS_CONFIG", value = "/opt/casc/jenkins.yml" },
       { name = "JAVA_OPTS", value = "-Djenkins.install.runSetupWizard=false -Xmx1g" },
-      { name = "JENKINS_ADMIN_PASSWORD", value = var.jenkins_admin_password },
       { name = "JENKINS_URL", value = "https://${var.domain_name}/" },
       { name = "ECS_CLUSTER_ARN", value = aws_ecs_cluster.detent.arn },
       { name = "AGENT_TASK_DEFINITION_ARN", value = aws_ecs_task_definition.agent.arn },
       { name = "AGENT_SUBNET_IDS", value = join(",", var.private_subnet_ids) },
       { name = "AGENT_SECURITY_GROUP_ID", value = aws_security_group.agent.id },
       { name = "AWS_REGION", value = data.aws_region.current.name },
+    ]
+
+    secrets = [
+      {
+        name      = "JENKINS_ADMIN_PASSWORD"
+        valueFrom = var.jenkins_admin_password_secret_arn
+      },
     ]
 
     logConfiguration = {

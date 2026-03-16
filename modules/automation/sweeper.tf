@@ -65,7 +65,7 @@ resource "aws_iam_role_policy" "sweeper_task" {
       {
         Sid    = "SNSPublish"
         Effect = "Allow"
-        Action = ["sns:Publish"]
+        Action = ["sns:Publish", "sns:ListTopics"]
         Resource = [
           aws_sns_topic.ops_events.arn,
           aws_sns_topic.ops_alerts.arn,
@@ -73,12 +73,15 @@ resource "aws_iam_role_policy" "sweeper_task" {
         ]
       },
       {
+        Sid    = "SQSListQueues"
+        Effect = "Allow"
+        Action = ["sqs:ListQueues"]
+        Resource = "*"
+      },
+      {
         Sid    = "SQSReadDLQ"
         Effect = "Allow"
-        Action = [
-          "sqs:GetQueueAttributes",
-          "sqs:ListQueues",
-        ]
+        Action = ["sqs:GetQueueAttributes"]
         Resource = "arn:aws:sqs:*:*:detent-*"
       },
     ]
