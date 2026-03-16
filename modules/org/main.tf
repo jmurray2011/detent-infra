@@ -23,6 +23,15 @@ resource "aws_organizations_policy" "permission_boundary_enforcement" {
           StringNotLike = {
             "iam:PermissionsBoundary" = "arn:aws:iam::*:policy/detent-permission-boundary"
           }
+          # Exempt SSO admin roles and OrganizationAccountAccessRole
+          # so Terraform can provision infrastructure roles that
+          # then have the boundary attached.
+          ArnNotLike = {
+            "aws:PrincipalArn" = [
+              "arn:aws:iam::*:role/OrganizationAccountAccessRole",
+              "arn:aws:iam::*:role/aws-reserved/sso.amazonaws.com/*/AWSReservedSSO_AWSAdministratorAccess_*",
+            ]
+          }
         }
       }
     ]

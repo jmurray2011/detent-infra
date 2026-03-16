@@ -1,0 +1,12 @@
+# Copy to backend.hcl and fill in your values.
+# Used at init time: terraform init -backend-config=../backend.hcl
+#
+# backend.hcl is gitignored — never commit account-specific values.
+
+bucket         = "your-tfstate-bucket"
+region         = "us-east-1"
+dynamodb_table = "your-tfstate-lock"
+
+# If the state bucket is in a different account than your caller identity,
+# add a role_arn to assume for backend access:
+# role_arn = "arn:aws:iam::ACCOUNT_ID:role/RoleName"

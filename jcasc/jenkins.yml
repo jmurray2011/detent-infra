@@ -1,0 +1,84 @@
+jenkins:
+  systemMessage: "Detent Automation Platform"
+  numExecutors: 0
+  labelString: ""
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "${JENKINS_ADMIN_PASSWORD}"
+
+  authorizationStrategy:
+    projectMatrix:
+      entries:
+        - group:
+            name: "authenticated"
+            permissions:
+              - "Overall/Read"
+              - "Job/Read"
+              - "Job/Build"
+              - "Job/Cancel"
+        - user:
+            name: "admin"
+            permissions:
+              - "Overall/Administer"
+
+  clouds:
+    - ecs:
+        name: "detent-ecs"
+        credentialsId: ""
+        cluster: "${ECS_CLUSTER_ARN}"
+        regionName: "${AWS_REGION}"
+        templates:
+          - label: "detent-agent"
+            templateName: "detent-agent"
+            taskDefinitionOverride: "${AGENT_TASK_DEFINITION_ARN}"
+            launchType: "FARGATE"
+            networkMode: "awsvpc"
+            subnets: "${AGENT_SUBNET_IDS}"
+            securityGroups: "${AGENT_SECURITY_GROUP_ID}"
+            assignPublicIp: false
+            cpu: 256
+            memoryReservation: 512
+            logDriver: "awslogs"
+            logDriverOptions:
+              - name: "awslogs-group"
+                value: "/ecs/detent-jenkins-agent"
+              - name: "awslogs-region"
+                value: "${AWS_REGION}"
+              - name: "awslogs-stream-prefix"
+                value: "agent"
+
+  remotingSecurity:
+    enabled: true
+
+unclassified:
+  location:
+    url: "${JENKINS_URL}"
+    adminAddress: "detent-admin@example.com"
+
+jobs:
+  - script: |
+      folder('lambda-deploy') {
+        description('Lambda deployment automation')
+      }
+      freeStyleJob('lambda-deploy/launcher') {
+        description('Placeholder — configure pipeline from SCM after initial setup')
+      }
+      freeStyleJob('lambda-deploy/watcher') {
+        description('Placeholder — configure pipeline from SCM after initial setup')
+      }
+      folder('config-sync') {
+        description('Config synchronization automation')
+      }
+      freeStyleJob('config-sync/launcher') {
+        description('Placeholder — configure pipeline from SCM after initial setup')
+      }
+      freeStyleJob('config-sync/watcher') {
+        description('Placeholder — configure pipeline from SCM after initial setup')
+      }
+      freeStyleJob('manual-intervention') {
+        description('Cancel, retry, or force-advance a stuck operation')
+      }

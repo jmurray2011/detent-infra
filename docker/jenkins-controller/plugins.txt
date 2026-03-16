@@ -1,0 +1,8 @@
+configuration-as-code
+pipeline-model-definition
+amazon-ecs
+aws-credentials
+job-dsl
+workflow-aggregator
+git
+matrix-auth

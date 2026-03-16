@@ -3,3 +3,8 @@
 *.tfstate.backup
 *.tfplan
 .terraform.lock.hcl
+
+# Local config — account-specific values, never committed
+backend.hcl
+*.auto.tfvars
+*.zip
