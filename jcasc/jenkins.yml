@@ -31,6 +31,7 @@ jenkins:
         credentialsId: ""
         cluster: "${ECS_CLUSTER_ARN}"
         regionName: "${AWS_REGION}"
+        jenkinsUrl: "${JENKINS_URL}"
         templates:
           - label: "detent-agent"
             templateName: "detent-agent"
@@ -40,6 +41,8 @@ jenkins:
             subnets: "${AGENT_SUBNET_IDS}"
             securityGroups: "${AGENT_SECURITY_GROUP_ID}"
             assignPublicIp: false
+            executionRole: "${AGENT_EXECUTION_ROLE_ARN}"
+            taskrole: "${AGENT_TASK_ROLE_ARN}"
             cpu: 256
             memoryReservation: 512
             logDriver: "awslogs"

@@ -55,6 +55,8 @@ resource "aws_ecs_task_definition" "controller" {
       { name = "AGENT_SECURITY_GROUP_ID", value = aws_security_group.agent.id },
       { name = "AWS_REGION", value = data.aws_region.current.name },
       { name = "AGENT_IMAGE", value = var.agent_image },
+      { name = "AGENT_EXECUTION_ROLE_ARN", value = aws_iam_role.agent_execution.arn },
+      { name = "AGENT_TASK_ROLE_ARN", value = aws_iam_role.agent_task.arn },
       { name = "DETENT_PIPELINES_REPO_URL", value = var.detent_pipelines_repo_url },
     ]
 
